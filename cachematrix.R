@@ -1,33 +1,43 @@
-## Put comments here that give an overall description of what your
-## functions do
+## R Programming, Assignment 2 by Jaakko Puurunen
+## Date: Jan-21, 2015
 
-## Write a short comment describing this function
+## makeCacheMatrix
+##
+## parameter sourceMatrix: matrix, assumed invertible
+## returns a list with four functions:
+##     1. setMatrix: function to assign matrix, checks if matrices
+##                   are different before assigning (avoids unnecessary solve call)
+##     2. getMatrix: returns current matrix
+##     3. setInverse: function to set inverse matrix value to list
+##     4. getInverse: returns current inverse matrix
 
 makeCacheMatrix <- function(sourceMatrix = matrix()) {
   mInverse <- NULL
   
+  # assign matrix value and reset inverse matrix value
   setMatrix <- function(y) {
-    print('setMatrix() called')
+    message('setMatrix() called')
     if (!identical(sourceMatrix, y))
     {
-      print('Matrix has changed -> setting new matrix and resetting inverse matrix')
+      message('Matrix has changed -> setting new matrix and resetting inverse matrix')
       sourceMatrix <<- y
       mInverse <<- NULL # reset inverse matrix value      
     }
   }
   
+  # return current matrix
   getMatrix <- function() {
-    print('getMatrix() called')
+    message('getMatrix() called')
     sourceMatrix
   }
 
   setInverse <- function(mInv) {
-    print('setInverse() called')
+    message('setInverse() called')
     mInverse <<- mInv
   }
   
   getInverse <- function() {
-    print('getInverse() called')
+    message('getInverse() called')
     mInverse
   }
   
@@ -35,20 +45,26 @@ makeCacheMatrix <- function(sourceMatrix = matrix()) {
        setInverse = setInverse, getInverse = getInverse)
 }
 
-## Write a short comment describing this function
+## cacheSolve
+##
+## Returns a matrix that is inverse of matrix stored in x
+##
+## parameter x: list generated with makeCacheMatrix
+##
+## Calculates inverse matrix by calling solve if inverse
+## matrix value in x is null (which indicates that matrix
+## has changed or inverse hasn't been solved at all yet)
 
 cacheSolve <- function(x, ...) {
-  ## Return a matrix that is the inverse of 'x'
 
   mInv <- x$getInverse()
   
-  if (is.null(mInv)) # must solve
+  if (is.null(mInv)) # inverse is NULL -> solve inverse
   {
-    print('No inverse found, must solve')
-    sourceMatrix <- x$getMatrix()
-    mInv <- solve(sourceMatrix, ...)
-    x$setInverse(mInv)
+    message('No inverse found, must solve')
+    sourceMatrix <- x$getMatrix() # get source matrix
+    x$setInverse(solve(sourceMatrix, ...)) # solve inverse and assign inverse to list
   }
-  mInv
+  mInv # return inverse
 
 }
