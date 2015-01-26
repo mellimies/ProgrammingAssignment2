@@ -63,7 +63,9 @@ cacheSolve <- function(x, ...) {
   {
     message('No inverse found, must solve')
     sourceMatrix <- x$getMatrix() # get source matrix
-    x$setInverse(solve(sourceMatrix, ...)) # solve inverse and assign inverse to list
+    mInv <- solve(sourceMatrix, ...)
+    x$setInverse(mInv) # solve inverse and assign inverse to list
+    #print(identical(mInv, x$getInverse()))
   }
   mInv # return inverse
 
